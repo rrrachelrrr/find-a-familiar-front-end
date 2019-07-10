@@ -59,9 +59,12 @@ function filterReviews(familiarId, reviewData){
 }
 
 function reviewClick(e){
-  console.log(e.target)
-  if (e.target.className === "delete-btn"){
-    console.log(e.target)
+  // console.log(e.target.className)
+  if (e.target.className === "delete-btn black-box"){
+    // debugger
+    console.log("DANGER! DANGER! HIGH VOLTAGE!")
+    // e.target.dataset.reviewId
+    deleteReview(e.target)
   }
 
 }
@@ -77,12 +80,20 @@ function animalClick(e){
 // when user clicks on a familiar, they should be able to ENTER A REVIEW as well as read existing reviews
 function familiarClick(e){
   if (e.target.className === "familiar-face"){
-    console.log(e.target.id)
+    // console.log(e.target.id)
     getReviews(e.target.id)
   }
 }
 
-function deleteReview(e){
+function deleteReview(eventTarget){
+  // eventTarget.parentElement is the li
+   const deleteId = eventTarget.dataset.reviewId
+   console.log(deleteId)
+  fetch(`http://localhost:3000/reviews/${deleteId}`, {
+    method: "DELETE"
+  }).then(function(){
+    eventTarget.parentElement.remove()
+  })
 
 }
 
@@ -126,7 +137,7 @@ function reviewsOnTheDom(reviewsArray, familiarId){
     const li = document.createElement("li")
     li.className = "review-list-item"
     li.innerHTML = `${review.comment}
-    <button class="delete-btn black-box" >Delete Review</button>
+    <button class="delete-btn black-box" data-review-id="${review.id}">Delete Review</button>
     `
     reviewsList.append(li)
   })
