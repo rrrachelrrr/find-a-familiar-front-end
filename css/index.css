@@ -1,0 +1,23 @@
+.box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.big {
+  width: 45rem;
+}
+
+.animal {
+  width: 100%
+}
+
+.familiar-face{
+  width: 35rem;
+}
+
+.animal-menu-item {
+  width: 20rem;
+  max-height: 20rem;
+  overflow: hidden;
+  border-style: solid;
+}
