@@ -2,17 +2,17 @@
   display: flex;
   justify-content: space-between;
 }
-
+/*
 .big {
   width: 45rem;
-}
+} */
 
 .animal {
   width: 100%
 }
 
 .familiar-face{
-  width: 35rem;
+  width: 40rem;
 }
 
 .animal-menu-item {
@@ -20,4 +20,8 @@
   max-height: 20rem;
   overflow: hidden;
   border-style: solid;
+}
+
+.reviews {
+  width: 20rem;
 }

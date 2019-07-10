@@ -10,6 +10,8 @@ const reviewsURL = "http://localhost:3000/reviews"
 const animalsList = document.querySelector("#animals-list")
 const familiarsList = document.querySelector("#familiars-list")
 const reviewsList = document.querySelector("#reviews-list")
+const formDiv = document.querySelector('#form-div')
+console.log(formDiv)
 
 
 //fetches
@@ -27,15 +29,15 @@ function getFamiliars(animalId){
 }
 
 function getReviews(familiarId){
-  fetch(reviewsURL)
+  return fetch(reviewsURL)
   .then(res => res.json())
-  .then(reviewData => filterReviews(familiarId, reviewData))
-
+  .then((reviewData) => filterReviews(familiarId, reviewData))
 }
 
 //event listeners
 animalsList.addEventListener('click', animalClick)
 familiarsList.addEventListener('click', familiarClick)
+formDiv.addEventListener('submit', submitFormPost)
 
 //functions
 //animalId is e.target.id.  IS STRING
@@ -51,7 +53,7 @@ function filterReviews(familiarId, reviewData){
   const filteredArray = reviewData.filter(review => {
     return review.familiar_id === parseInt(familiarId)
   })
-  reviewsOnTheDom(filteredArray)
+  reviewsOnTheDom(filteredArray, familiarId)
   // console.log(familiarId)
 }
 
@@ -71,17 +73,64 @@ function familiarClick(e){
   }
 }
 
+function submitFormPost(e){
+  e.preventDefault()
+  const famId = parseInt(e.target.dataset.familiarId)
+  const comment = e.target.comment.value
+  console.log(comment)
+  //
+  fetch(`http://localhost:3000/reviews/`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      comment,
+      familiar_id: famId
+
+    })
+  })
+  .then(res => res.json())
+  .then(addOneReview)
+
+}
+
+
 //slapping on the DOM
-function reviewsOnTheDom(reviewsArray){
+function reviewsOnTheDom(reviewsArray, familiarId){
+  //add a review form to reviews; create submit form and append it to the formDiv
+  reviewsList.innerHTML = ""
+  // const reviewForm = document.createElement("form")
+  formDiv.innerHTML = `
+  <form class="add-review" data-familiar-id="${familiarId}">
+  <h5>How helpful was this magical assistant?</h5>
+  <input type="textbox" name="comment" value="" placeholder="✨💫✨" class="input-text">
+  <br>
+  <input type="submit" name="submit" value="Review This Familiar ✨" class="submit">
+  </form>
+  `
+  // formDiv.append(reviewForm)
+  //slap reviews on the DOM
   reviewsArray.forEach(review => {
     const li = document.createElement("li")
     li.className = "review-list-item"
     li.innerText = `${review.comment}`
+    reviewsList.append(li)
   })
+}
+
+function addOneReview(data){
+  const li = document.createElement("li")
+  li.className = "review-list-item"
+  li.innerText = `${data.comment}`
+  reviewsList.append(li)
+
 
 }
 
+// familiars on the DOM
 function familiarsOnTheDom(familiarArray){
+  reviewsList.innerHTML = ""
+  familiarsList.innerHTML = ""
+  formDiv.innerHTML = ""
   familiarArray.forEach(familiar => {
     console.log(familiar.name)
     const li = document.createElement("li")
