@@ -38,6 +38,7 @@ function getReviews(familiarId){
 animalsList.addEventListener('click', animalClick)
 familiarsList.addEventListener('click', familiarClick)
 formDiv.addEventListener('submit', submitFormPost)
+reviewsList.addEventListener('click', reviewClick)
 
 //functions
 //animalId is e.target.id.  IS STRING
@@ -57,6 +58,14 @@ function filterReviews(familiarId, reviewData){
   // console.log(familiarId)
 }
 
+function reviewClick(e){
+  console.log(e.target)
+  if (e.target.className === "delete-btn"){
+    console.log(e.target)
+  }
+
+}
+
 // pass the animal ID into the fetch request
 function animalClick(e){
   if (e.target.className === "animal"){
@@ -71,6 +80,10 @@ function familiarClick(e){
     console.log(e.target.id)
     getReviews(e.target.id)
   }
+}
+
+function deleteReview(e){
+
 }
 
 function submitFormPost(e){
@@ -102,9 +115,9 @@ function reviewsOnTheDom(reviewsArray, familiarId){
   formDiv.innerHTML = `
   <form class="add-review" data-familiar-id="${familiarId}">
   <h5>How helpful was this magical assistant?</h5>
-  <input type="textbox" name="comment" value="" placeholder="✨💫✨" class="input-text">
+  <input type="textbox" name="comment" value="" placeholder="✨💫✨" class="input-text" >
   <br>
-  <input type="submit" name="submit" value="Review This Familiar ✨" class="submit">
+  <input type="submit" name="submit" value="Review This Familiar ✨" class="submit black-box">
   </form>
   `
   // formDiv.append(reviewForm)
@@ -112,7 +125,9 @@ function reviewsOnTheDom(reviewsArray, familiarId){
   reviewsArray.forEach(review => {
     const li = document.createElement("li")
     li.className = "review-list-item"
-    li.innerText = `${review.comment}`
+    li.innerHTML = `${review.comment}
+    <button class="delete-btn black-box" >Delete Review</button>
+    `
     reviewsList.append(li)
   })
 }

@@ -7,6 +7,11 @@
   width: 45rem;
 } */
 
+.black-box {
+  background-color: black;
+  color: white;
+}
+
 .animal {
   width: 100%
 }
