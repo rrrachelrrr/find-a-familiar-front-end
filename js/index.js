@@ -109,15 +109,18 @@ function allCapsReview(eventTarget){
 function likeReview(eventTarget){
   console.log(eventTarget.dataset.likeId)
   const likeId = eventTarget.dataset.likeId
-  const likePTag = eventTarget.parentElement.querySelector("p")
-  console.log(likePTag)
+  const likeCounter =
+  eventTarget.parentElement.querySelector(".like-counter")
+  console.log(likeCounter)
+  // debugger
+  // console.log("ihi")
 
-  let newLikeCount = parseInt(likePTag.dataset.likeCount)
+  let newLikeCount = parseInt(likeCounter.dataset.likeCount)
   console.log(newLikeCount)
   newLikeCount ++
   console.log(newLikeCount)
-  likePTag.dataset.LikeCount = newLikeCount
-  likePTag.innerHTML = `Liked ${newLikeCount} times`
+  likeCounter.dataset.LikeCount = newLikeCount
+  likeCounter.innerHTML = `Liked ${newLikeCount} times`
 
   fetch(`http://localhost:3000/reviews/${likeId}`, {
     method: "PATCH",
@@ -126,8 +129,8 @@ function likeReview(eventTarget){
       likes: newLikeCount
     })
   })
-  .then(resp=>resp.json())
-  .then(oneFamiliarsReviews())
+  // .then(resp=>resp.json())
+  // .then(oneFamiliarsReviews())
 }
 
 
@@ -153,7 +156,8 @@ function submitFormPost(e){
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       comment,
-      familiar_id: famId
+      familiar_id: famId,
+      likes: 0
 
     })
   })
@@ -182,7 +186,7 @@ function reviewsOnTheDom(reviewsArray, familiarId){
     const li = document.createElement("li")
     li.className = "review-list-item"
     li.innerHTML = `<p class="review-text">${review.comment}</p>
-    <p data-like-count="${review.likes}">Liked ${review.likes} times</p>
+    <p class="like-counter" data-like-count="${review.likes}">Liked ${review.likes} times</p>
     <button class="like-btn black-box" data-like-id="${review.id}">Like Review 🌟</button>
     <button class="delete-btn black-box" data-review-id="${review.id}">Delete Review ☄️</button>
     <button class="all-caps-btn black-box" data-all-caps-id="${review.id}">ALL CAPS 💥📣</button>
@@ -195,7 +199,11 @@ function reviewsOnTheDom(reviewsArray, familiarId){
 function addOneReview(data){
   const li = document.createElement("li")
   li.className = "review-list-item"
-  li.innerText = `${data.comment}`
+  li.innerHTML = `${data.comment}
+  <p class="like-counter" data-like-count="${data.likes}">Liked ${data.likes} times</p>
+  <button class="like-btn black-box" data-like-id="${data.id}">Like Review 🌟</button>
+  <button class="delete-btn black-box" data-data-id="${data.id}">Delete Review ☄️</button>
+  <button class="all-caps-btn black-box" data-all-caps-id="${data.id}">ALL CAPS 💥📣</button>`
   reviewsList.append(li)
 }
 
