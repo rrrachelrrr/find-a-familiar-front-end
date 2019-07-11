@@ -11,7 +11,6 @@ const animalsList = document.querySelector("#animals-list")
 const familiarsList = document.querySelector("#familiars-list")
 const reviewsList = document.querySelector("#reviews-list")
 const formDiv = document.querySelector('#form-div')
-console.log(formDiv)
 
 
 //fetches
@@ -66,6 +65,12 @@ function reviewClick(e){
     // e.target.dataset.reviewId
     deleteReview(e.target)
   }
+  else if (e.target.className === "like-btn black-box"){
+    likeReview(e.target)
+  }
+  else if(e.target.className === "all-caps-btn black-box"){
+    allCapsReview(e.target)
+  }
 
 }
 
@@ -85,16 +90,56 @@ function familiarClick(e){
   }
 }
 
+function allCapsReview(eventTarget){
+  const allCapsId = eventTarget.dataset.allCapsId
+  const capsComment = eventTarget.parentElement.querySelector(".review-text").innerText =
+  eventTarget.parentElement.querySelector(".review-text").innerText.toUpperCase()
+  console.log(capsComment)
+
+  fetch(`http://localhost:3000/reviews/${allCapsId}`, {
+    method: "PATCH",
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      comment: capsComment
+    })
+  })
+
+}
+
+function likeReview(eventTarget){
+  console.log(eventTarget.dataset.likeId)
+  const likeId = eventTarget.dataset.likeId
+  const likePTag = eventTarget.parentElement.querySelector("p")
+  console.log(likePTag)
+
+  let newLikeCount = parseInt(likePTag.dataset.likeCount)
+  console.log(newLikeCount)
+  newLikeCount ++
+  console.log(newLikeCount)
+  likePTag.dataset.LikeCount = newLikeCount
+  likePTag.innerHTML = `Liked ${newLikeCount} times`
+
+  fetch(`http://localhost:3000/reviews/${likeId}`, {
+    method: "PATCH",
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      likes: newLikeCount
+    })
+  })
+  .then(resp=>resp.json())
+  .then(oneFamiliarsReviews())
+}
+
+
 function deleteReview(eventTarget){
   // eventTarget.parentElement is the li
    const deleteId = eventTarget.dataset.reviewId
-   console.log(deleteId)
+   // console.log(deleteId)
   fetch(`http://localhost:3000/reviews/${deleteId}`, {
     method: "DELETE"
   }).then(function(){
     eventTarget.parentElement.remove()
   })
-
 }
 
 function submitFormPost(e){
@@ -136,18 +181,25 @@ function reviewsOnTheDom(reviewsArray, familiarId){
   reviewsArray.forEach(review => {
     const li = document.createElement("li")
     li.className = "review-list-item"
-    li.innerHTML = `${review.comment}
-    <button class="delete-btn black-box" data-review-id="${review.id}">Delete Review</button>
+    li.innerHTML = `<p class="review-text">${review.comment}</p>
+    <p data-like-count="${review.likes}">Liked ${review.likes} times</p>
+    <button class="like-btn black-box" data-like-id="${review.id}">Like Review 🌟</button>
+    <button class="delete-btn black-box" data-review-id="${review.id}">Delete Review ☄️</button>
+    <button class="all-caps-btn black-box" data-all-caps-id="${review.id}">ALL CAPS 💥📣</button>
     `
     reviewsList.append(li)
   })
 }
+
 
 function addOneReview(data){
   const li = document.createElement("li")
   li.className = "review-list-item"
   li.innerText = `${data.comment}`
   reviewsList.append(li)
+}
+
+function oneFamiliarsReviews(familiarId){
 
 
 }
