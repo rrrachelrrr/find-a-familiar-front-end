@@ -199,7 +199,7 @@ function reviewsOnTheDom(reviewsArray, familiarId){
 function addOneReview(data){
   const li = document.createElement("li")
   li.className = "review-list-item"
-  li.innerHTML = `${data.comment}
+  li.innerHTML = `<p class="review-text">${data.comment}</p>
   <p class="like-counter" data-like-count="${data.likes}">Liked ${data.likes} times</p>
   <button class="like-btn black-box" data-like-id="${data.id}">Like Review 🌟</button>
   <button class="delete-btn black-box" data-data-id="${data.id}">Delete Review ☄️</button>
