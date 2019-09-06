@@ -58,7 +58,7 @@ function filterReviews(familiarId, reviewData){
 }
 
 function reviewClick(e){
-  // console.log(e.target.className)
+  // console.log('e.target.className')
   if (e.target.className === "delete-btn black-box"){
     // debugger
     console.log("DANGER! DANGER! HIGH VOLTAGE!")

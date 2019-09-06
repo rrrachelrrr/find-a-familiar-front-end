@@ -20,6 +20,16 @@
   width: 40rem;
 }
 
+#familiars-list{
+  overflow: scroll;
+  max-height: 150vh;
+}
+
+#reviews-list{
+  overflow: scroll;
+  max-height: 150vh;
+}
+
 .animal-menu-item {
   width: 20rem;
   max-height: 20rem;
